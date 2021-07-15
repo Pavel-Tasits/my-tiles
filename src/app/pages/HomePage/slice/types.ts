@@ -1,4 +1,4 @@
 /* --- STATE --- */
 export interface HomepageSliceState {
-  color?: string
+  colorArr?: object
 }

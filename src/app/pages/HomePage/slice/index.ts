@@ -4,14 +4,16 @@ import { useInjectReducer } from 'utils/redux-injectors';
 import { HomepageSliceState } from './types';
 
 export const initialState: HomepageSliceState = {
-  color: ''
+  colorArr: {},
 };
 
 const slice = createSlice({
   name: 'homepageSlice',
   initialState,
   reducers: {
-    someAction(state, action: PayloadAction<any>) {},
+    changeColor(state, action: PayloadAction<any>) {
+      state.colorArr = action.payload;
+    },
   },
 });
 
@@ -21,6 +23,7 @@ export const useHomepageSliceSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions };
 };
+
 
 /**
  * Example Usage:
