@@ -4,8 +4,9 @@ import {Helmet} from 'react-helmet-async';
 import Container from '@material-ui/core/Container';
 import {Tile} from '../../components/Tile';
 import {makeStyles} from "@material-ui/core/styles";
-import {useDispatch} from 'react-redux';
-import {useHomepageSliceSlice} from "./slice";
+import { useSelector } from 'react-redux';
+import { useHomepageSliceSlice} from "./slice";
+import { selectHomepageSlice} from "./slice/selectors";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -32,17 +33,10 @@ const getColor = () => {
   }
 };
 
-interface IColorArr {
-  id: number,
-  color: string
-}
+interface IKeys { key1: string; key2: number }
 
 export function HomePage() {
-  const { actions } = useHomepageSliceSlice()
-  const dispatch = useDispatch();
-  const [tilesArr1, setColorTilesArr] = useState<IColorArr[]>([])
-
-  console.log('tilesArr1',tilesArr1)
+  const tileClickedArr = useSelector(selectHomepageSlice);
   const tilesArr = [
     {id: 1, color: ''},
     {id: 2, color: ''},
@@ -65,15 +59,17 @@ export function HomePage() {
     tilesArr.forEach(item => {
       item.color = getColor() as string
     })
-    setColorTilesArr(tilesArr)
   }, [])
 
-
   useEffect(() => {
-    if (tilesArr1.length !== 0) {
-      dispatch(actions.changeColor(tilesArr1));
+    if (tileClickedArr && tileClickedArr.length > 1) {
+      let colorsArr: Array<string> = [];
+      tileClickedArr.map((item, index) => {
+        //colorsArr.push(item.color)
+      })
+      console.log('colorsArr', colorsArr)
     }
-  }, [tilesArr1])
+  }, [tileClickedArr])
 
   const classes = useStyles();
 
@@ -92,6 +88,7 @@ export function HomePage() {
             return (
               <Tile
                 key={item.id}
+                id={item.id}
                 color={item.color}
               />
             )

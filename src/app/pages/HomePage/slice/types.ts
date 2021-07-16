@@ -1,4 +1,4 @@
 /* --- STATE --- */
 export interface HomepageSliceState {
-  colorArr?: object
+  tileClicked?: Array<object>
 }

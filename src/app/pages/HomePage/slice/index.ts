@@ -4,15 +4,16 @@ import { useInjectReducer } from 'utils/redux-injectors';
 import { HomepageSliceState } from './types';
 
 export const initialState: HomepageSliceState = {
-  colorArr: {},
+  tileClicked: [],
 };
 
 const slice = createSlice({
   name: 'homepageSlice',
   initialState,
   reducers: {
-    changeColor(state, action: PayloadAction<any>) {
-      state.colorArr = action.payload;
+    setTileClicked(state, action: PayloadAction<any>) {
+      // @ts-ignore
+      state.tileClicked = [...state.tileClicked, action.payload];
     },
   },
 });

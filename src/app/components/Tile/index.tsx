@@ -2,6 +2,9 @@ import * as React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from 'react-redux';
+import { useHomepageSliceSlice } from "../../pages/HomePage/slice";
+import { selectHomepageSlice } from "../../pages/HomePage/slice/selectors";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,23 +21,18 @@ const useStyles = makeStyles(theme => ({
 
 interface ITileProps {
   color: string;
+  id: number;
 }
 
-export function Tile({ color }: ITileProps) {
-  const [active, setActive] = useState(false)
+export function Tile({ color, id }: ITileProps) {
+  const { actions } = useHomepageSliceSlice()
+  const dispatch = useDispatch();
   const [activeColor, setActiveColor] = useState('')
 
   const handleActiveToggle = () => {
-    setActive(!active)
+    setActiveColor(color)
+    dispatch(actions.setTileClicked({id, color}));
   }
-
-  useEffect(() => {
-    if (active) {
-      setActiveColor(color)
-    } else (
-      setActiveColor('#fff')
-    )
-  }, [active])
 
   const classes = useStyles();
 
@@ -42,7 +40,7 @@ export function Tile({ color }: ITileProps) {
     <div className={classes.root}>
       <Paper
         style={{backgroundColor: activeColor}}
-        elevation={active ? 0 : 3}
+        elevation={activeColor !== '' ? 0 : 3}
         onClick={handleActiveToggle}/>
     </div>
   );
