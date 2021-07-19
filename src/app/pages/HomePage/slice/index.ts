@@ -12,8 +12,21 @@ const slice = createSlice({
   initialState,
   reducers: {
     setTileClicked(state, action: PayloadAction<any>) {
-      // @ts-ignore
-      state.tileClicked = [...state.tileClicked, action.payload];
+      state?.tileClicked?.push(action.payload);
+      /*if (state?.tileClicked?.length !== 0) {
+        console.log('!=0')
+        state?.tileClicked?.map(item => {
+          if (item.id !== action.payload.id) {
+            console.log('item.id', item.id)
+            console.log('action.payload.id', action.payload.id)
+            state?.tileClicked?.push(action.payload);
+          }
+        })
+      } else {
+        console.log('=0')
+        state?.tileClicked?.push(action.payload);
+      }*/
+    //console.log('state', state)
     },
   },
 });

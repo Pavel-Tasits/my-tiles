@@ -7,6 +7,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import { useSelector } from 'react-redux';
 import { useHomepageSliceSlice} from "./slice";
 import { selectHomepageSlice} from "./slice/selectors";
+import _ from 'lodash'
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -33,10 +34,23 @@ const getColor = () => {
   }
 };
 
-interface IKeys { key1: string; key2: number }
+interface IArrayWithColor {
+  id: number,
+  color: string
+}
 
-export function HomePage() {
-  const tileClickedArr = useSelector(selectHomepageSlice);
+const compareColors = (arr) => {
+  _.forEach(arr, function(value, key) {
+    console.log('key', key)
+    console.log('value', value)
+    _.filter(value, function (o) {console.log(o.color)})
+  })
+}
+
+export const HomePage = () => {
+  const storeArr = useSelector(selectHomepageSlice);
+  const [arrayWithColor, setArrayWithColor] = useState<IArrayWithColor[]>([])
+
   const tilesArr = [
     {id: 1, color: ''},
     {id: 2, color: ''},
@@ -54,37 +68,34 @@ export function HomePage() {
   tilesArr.forEach(item => {
     item.color = getColor() as string
   })
-
   useEffect(() => {
     tilesArr.forEach(item => {
       item.color = getColor() as string
     })
+    setArrayWithColor(tilesArr)
   }, [])
 
+  console.log('storeArr', storeArr)
+
   useEffect(() => {
-    if (tileClickedArr && tileClickedArr.length > 1) {
-      let colorsArr: Array<string> = [];
-      tileClickedArr.map((item, index) => {
-        //colorsArr.push(item.color)
-      })
-      console.log('colorsArr', colorsArr)
-    }
-  }, [tileClickedArr])
+    compareColors(storeArr)
+    //console.log('!!!', r)
+  }, [storeArr])
 
   const classes = useStyles();
 
   return (
     <>
-      <Helmet>
+      {/*<Helmet>
         <title>Home Page</title>
         <meta
           name="description"
           content="A React Boilerplate application homepage"
         />
-      </Helmet>
+      </Helmet>*/}
       <Container maxWidth="sm">
         <div className={classes.root}>
-          {tilesArr.map(item => {
+          {arrayWithColor.map(item => {
             return (
               <Tile
                 key={item.id}
