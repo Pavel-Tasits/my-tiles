@@ -5,7 +5,12 @@ import { initialState } from '.';
 
 const selectSlice = (state: RootState) => state.homepageSlice || initialState;
 
-export const selectHomepageSlice = createSelector(
+export const selectTileClicked = createSelector(
   [selectSlice],
   state => state.tileClicked,
+);
+
+export const selectComparedIdArr = createSelector(
+  [selectSlice],
+  state => state.comparedIdArr,
 );

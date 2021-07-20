@@ -5,6 +5,7 @@ import { HomepageSliceState } from './types';
 
 export const initialState: HomepageSliceState = {
   tileClicked: [],
+  comparedIdArr: []
 };
 
 const slice = createSlice({
@@ -13,20 +14,12 @@ const slice = createSlice({
   reducers: {
     setTileClicked(state, action: PayloadAction<any>) {
       state?.tileClicked?.push(action.payload);
-      /*if (state?.tileClicked?.length !== 0) {
-        console.log('!=0')
-        state?.tileClicked?.map(item => {
-          if (item.id !== action.payload.id) {
-            console.log('item.id', item.id)
-            console.log('action.payload.id', action.payload.id)
-            state?.tileClicked?.push(action.payload);
-          }
-        })
-      } else {
-        console.log('=0')
-        state?.tileClicked?.push(action.payload);
-      }*/
-    //console.log('state', state)
+    },
+    setComparedId(state, action: PayloadAction<any>) {
+      state?.comparedIdArr?.push(action.payload[0], action.payload[1]);
+    },
+    setChangeTileClicked(state, action: PayloadAction<any>) {
+      state?.tileClicked?.push(action.payload);
     },
   },
 });
