@@ -2,10 +2,11 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Tile } from '../../components/Tile';
+import {MainBtn} from "../../components/Button";
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHomepageSliceSlice} from "./slice";
-import { selectTileClicked } from './slice/selectors';
+import {selectComparedIdArr, selectTileClicked} from './slice/selectors';
 import _ from 'lodash';
 
 const useStyles = makeStyles(() => ({
@@ -54,10 +55,25 @@ const compareColors = (arr): any => {
   return m
 };
 
+const removeComparedTiles = (arr1, arr2) => {
+  return arr1.filter((itemA) => {
+    return !arr2.find((itemB) => {
+      return itemA.id === itemB.id
+    })
+  })
+}
+
+const defineEndGame = (arr1, arr2, tileNum) => {
+  if (arr1.concat(arr2).length === tileNum) {
+    return true
+  }
+};
+
 export const HomePage = () => {
   const { actions } = useHomepageSliceSlice()
   const dispatch = useDispatch();
   const storeArr = useSelector(selectTileClicked);
+  const comparedArr = useSelector(selectComparedIdArr);
   const [arrayWithColor, setArrayWithColor] = useState<IArrayWithColor[]>([]);
 
   const tilesArr = [
@@ -91,17 +107,22 @@ export const HomePage = () => {
     }
   }, [storeArr]);
 
+  useEffect(() => {
+    if(comparedArr && comparedArr.length !== 0) {
+      dispatch(actions.setChangeTileClicked(removeComparedTiles(storeArr, comparedArr)))
+    }
+  },[comparedArr])
+
   const classes = useStyles();
 
   return (
-    <>
-      <Container maxWidth="sm">
+    <Container maxWidth="sm">
+        {defineEndGame(storeArr, comparedArr, tilesArr.length) && <MainBtn/>}
         <div className={classes.root}>
           {arrayWithColor.map(item => {
             return <Tile key={item.id} id={item.id} color={item.color} />;
           })}
         </div>
-      </Container>
-    </>
+    </Container>
   );
 };

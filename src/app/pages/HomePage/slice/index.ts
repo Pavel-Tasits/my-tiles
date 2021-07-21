@@ -19,7 +19,7 @@ const slice = createSlice({
       state?.comparedIdArr?.push(action.payload[0], action.payload[1]);
     },
     setChangeTileClicked(state, action: PayloadAction<any>) {
-      state?.tileClicked?.push(action.payload);
+      state.tileClicked = action.payload;
     },
   },
 });
