@@ -2,7 +2,6 @@ import * as React from 'react';
 import { useEffect, useState } from 'react';
 import Container from '@material-ui/core/Container';
 import { Tile } from '../../components/Tile';
-import { MainBtn } from '../../components/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHomepageSliceSlice } from './slice';
