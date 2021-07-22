@@ -39,32 +39,13 @@ function getColor() {
   }
 }
 
-const defaultColors = ['#F50717', '#2328EB', '#15F057', '#F0E824'];
-
 function createTiles(tilesQuantity: number) {
   let newTilesArr: IArrayWithColor[] = [];
   for (let i = 1; i <= tilesQuantity; i++) {
     newTilesArr.push({ id: i, color: getColor() as string });
-    //newTilesArr.push({ id: i, color: '' });
   }
-  /*let countArr = [
-    { '#F50717': 0 },
-    { '#2328EB': 0 },
-    { '#15F057': 0 },
-    { '#F0E824': 0 },
-  ];
-  console.log('countArr!!!!', countArr);
-
-  newTilesArr.forEach(obj => {
-    let color = getColor() as string;
-    countArr.forEach((colorCount, i) => {
-      obj.color = getColor() as string;
-    });
-  });*/
   return newTilesArr;
 }
-
-console.log('newTilesArr', createTiles(12));
 
 function compareColors(arr): any {
   let m: number[] = [];
