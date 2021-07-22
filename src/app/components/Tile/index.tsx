@@ -4,7 +4,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import {useDispatch, useSelector} from 'react-redux';
 import {useHomepageSliceSlice} from "../../pages/HomePage/slice";
-import { selectComparedIdArr } from "../../pages/HomePage/slice/selectors";
+import {selectComparedIdArr, selectTileClicked} from "../../pages/HomePage/slice/selectors";
 import _ from 'lodash';
 
 const useStyles = makeStyles(theme => ({
@@ -26,6 +26,9 @@ const useStyles = makeStyles(theme => ({
 interface ITileProps {
   color: string;
   id: number;
+  tileToClose: number[],
+  setIsTimeout(isTimeout: boolean): any,
+  isTimeout: boolean
 }
 
 const isComparedTile = (arr, tileId) => {
@@ -36,23 +39,36 @@ const isComparedTile = (arr, tileId) => {
   return k;
 }
 
-export function Tile({ color, id }: ITileProps) {
+export function Tile({ color, id, tileToClose, setIsTimeout, isTimeout }: ITileProps) {
   const { actions } = useHomepageSliceSlice()
   const dispatch = useDispatch();
+  const storeArr = useSelector(selectTileClicked);
   const comparedArr = useSelector(selectComparedIdArr);
   const [activeColor, setActiveColor] = useState('')
   const [comparedTile, setComparedTile] = useState(false)
 
   const handleActiveToggle = () => {
-    if (!activeColor) {
-      setActiveColor(color)
-      dispatch(actions.setTileClicked({id, color}));
+    if (!isTimeout) {
+      if (!comparedTile) {
+        setActiveColor(color)
+        dispatch(actions.setTileClicked({id, color}));
+      }
     }
   }
 
   useEffect(() => {
+    if (storeArr?.length === 0 && (tileToClose[0] === id || tileToClose[1] === id)) {
+      setIsTimeout(true)
+      setTimeout(() => {
+        setActiveColor('')
+        setIsTimeout(false)
+      }, 1000)
+    }
+  }, [storeArr])
+
+  useEffect(() => {
     setComparedTile(isComparedTile(comparedArr, id))
-  },[comparedArr])
+  },[storeArr])
 
   const classes = useStyles();
 
@@ -61,7 +77,7 @@ export function Tile({ color, id }: ITileProps) {
       <Paper
         style={comparedTile ? {backgroundColor: '#fff'} : {backgroundColor: activeColor}}
         className={classes.tile}
-        elevation={activeColor !== '' ? 0 : 3}
+        elevation={comparedTile ? 0 : 3}
         onClick={handleActiveToggle}
       />
     </div>

@@ -22,7 +22,7 @@ interface IArrayWithColor {
   color: string;
 }
 
-const getColor = () => {
+function getColor() {
   switch (Math.floor(Math.random() * 4)) {
     case 0: {
       return '#F50717';
@@ -37,9 +37,40 @@ const getColor = () => {
       return '#F0E824';
     }
   }
-};
+}
 
-const compareColors = (arr): any => {
+const defaultColors = ['#F50717', '#2328EB', '#15F057', '#F0E824']
+
+function createTiles(tilesQuantity: number) {
+  let newTilesArr: IArrayWithColor[] = [];
+  for (let i = 1; i <= tilesQuantity; i++) {
+    newTilesArr.push({ id: i, color: getColor() as string })
+    //newTilesArr.push({ id: i, color: '' })
+  }
+  /*let countArr = [
+    {'#F50717': 0},
+    {'#2328EB': 0},
+    {'#15F057': 0},
+    {'#F0E824': 0}
+  ]
+  console.log('countArr!!!!', countArr)
+
+  newTilesArr.forEach(obj => {
+    let color = getColor() as string
+    countArr.forEach((colorCount, i) => {
+      if (colorCount[color] < 3) {
+        obj.color = color
+        colorCount[color]++
+      } else {
+        return color = getColor() as string
+      }
+
+    })
+  })*/
+  return newTilesArr;
+}
+
+function compareColors(arr): any {
   let m: number[] = []
   _.forEach(arr, function (value) {
     const comparedColorsArr: number[] = [];
@@ -53,9 +84,9 @@ const compareColors = (arr): any => {
     }
   });
   return m
-};
+}
 
-const removeComparedTiles = (arr1, arr2) => {
+function removeComparedTiles(arr1, arr2) {
   return arr1.filter((itemA) => {
     return !arr2.find((itemB) => {
       return itemA.id === itemB.id
@@ -63,47 +94,27 @@ const removeComparedTiles = (arr1, arr2) => {
   })
 }
 
-const defineEndGame = (arr1, arr2, tileNum) => {
-  if (arr1.concat(arr2).length === tileNum) {
-    return true
-  }
-};
-
 export const HomePage = () => {
   const { actions } = useHomepageSliceSlice()
   const dispatch = useDispatch();
   const storeArr = useSelector(selectTileClicked);
   const comparedArr = useSelector(selectComparedIdArr);
   const [arrayWithColor, setArrayWithColor] = useState<IArrayWithColor[]>([]);
+  const [tileToClose, setTileToClose] = useState<number[]>([])
+  const [isTimeout, setIsTimeout] = useState(false)
 
-  const tilesArr = [
-    { id: 1, color: '' },
-    { id: 2, color: '' },
-    { id: 3, color: '' },
-    { id: 4, color: '' },
-    { id: 5, color: '' },
-    { id: 6, color: '' },
-    { id: 7, color: '' },
-    { id: 8, color: '' },
-    { id: 9, color: '' },
-    { id: 10, color: '' },
-    { id: 11, color: '' },
-    { id: 12, color: '' },
-  ];
-  tilesArr.forEach(item => {
-    item.color = getColor() as string;
-  });
   useEffect(() => {
-    tilesArr.forEach(item => {
-      item.color = getColor() as string;
-    });
-    setArrayWithColor(tilesArr);
+    setArrayWithColor(createTiles(12));
   }, []);
 
   useEffect(() => {
-    const compareResult = compareColors(storeArr)
-    if(compareResult.length > 1) {
+    if(compareColors(storeArr).length > 1) {
       dispatch(actions.setComparedId(compareColors(storeArr)));
+    } else {
+      if (storeArr?.length === 2) {
+        dispatch(actions.setChangeTileClicked([]))
+        setTileToClose([storeArr[0].id, storeArr[1].id])
+      }
     }
   }, [storeArr]);
 
@@ -117,12 +128,18 @@ export const HomePage = () => {
 
   return (
     <Container maxWidth="sm">
-        {defineEndGame(storeArr, comparedArr, tilesArr.length) && <MainBtn/>}
-        <div className={classes.root}>
-          {arrayWithColor.map(item => {
-            return <Tile key={item.id} id={item.id} color={item.color} />;
-          })}
-        </div>
+      <div className={classes.root}>
+        {arrayWithColor.map(item => {
+          return <Tile
+            key={item.id}
+            id={item.id}
+            color={item.color}
+            tileToClose={tileToClose}
+            setIsTimeout={setIsTimeout}
+            isTimeout={isTimeout}
+          />;
+        })}
+      </div>
     </Container>
   );
 };
