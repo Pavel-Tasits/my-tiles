@@ -4,7 +4,7 @@ import Container from '@material-ui/core/Container';
 import { Tile } from '../../components/Tile';
 import { makeStyles } from '@material-ui/core/styles';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHomepageSliceSlice } from './slice';
+import { useHomepageSlice } from './slice';
 import { selectComparedIdArr, selectTileClicked } from './slice/selectors';
 import _ from 'lodash';
 
@@ -71,7 +71,7 @@ function removeComparedTiles(arr1, arr2) {
 }
 
 export const HomePage = () => {
-  const { actions } = useHomepageSliceSlice();
+  const { actions } = useHomepageSlice();
   const dispatch = useDispatch();
   const storeArr = useSelector(selectTileClicked);
   const comparedArr = useSelector(selectComparedIdArr);

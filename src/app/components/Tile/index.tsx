@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHomepageSliceSlice } from '../../pages/HomePage/slice';
+import { useHomepageSlice } from '../../pages/HomePage/slice';
 import {
   selectComparedIdArr,
   selectTileClicked,
@@ -34,7 +34,7 @@ interface ITileProps {
   isTimeout: boolean;
 }
 
-const isComparedTile = (arr, tileId) => {
+const isComparedTile = (arr, tileId): boolean => {
   let k: boolean = false;
   _.forEach(arr, function (elem) {
     if (elem.id === tileId) return (k = true);
@@ -49,7 +49,7 @@ export function Tile({
   setIsTimeout,
   isTimeout,
 }: ITileProps) {
-  const { actions } = useHomepageSliceSlice();
+  const { actions } = useHomepageSlice();
   const dispatch = useDispatch();
   const storeArr = useSelector(selectTileClicked);
   const comparedArr = useSelector(selectComparedIdArr);
@@ -77,7 +77,7 @@ export function Tile({
       setTimeout(() => {
         setActiveColor('');
         setIsTimeout(false);
-      }, 1000);
+      }, 500);
     }
   }, [storeArr]);
 

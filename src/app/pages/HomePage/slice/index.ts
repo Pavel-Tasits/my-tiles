@@ -26,7 +26,7 @@ const slice = createSlice({
 
 export const { actions: homepageSliceActions } = slice;
 
-export const useHomepageSliceSlice = () => {
+export const useHomepageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions };
 };
