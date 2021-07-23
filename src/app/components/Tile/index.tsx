@@ -32,6 +32,7 @@ interface ITileProps {
   tileToClose: number[];
   setIsTimeout(isTimeout: boolean): any;
   isTimeout: boolean;
+  clickCount(): any;
 }
 
 const isComparedTile = (arr, tileId): boolean => {
@@ -48,6 +49,7 @@ export function Tile({
   tileToClose,
   setIsTimeout,
   isTimeout,
+  clickCount,
 }: ITileProps) {
   const { actions } = useHomepageSlice();
   const dispatch = useDispatch();
@@ -64,6 +66,7 @@ export function Tile({
       ) {
         setActiveColor(color);
         dispatch(actions.setTileClicked({ id, color }));
+        clickCount();
       }
     }
   };

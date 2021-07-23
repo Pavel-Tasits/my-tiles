@@ -7,13 +7,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHomepageSlice } from './slice';
 import { selectComparedIdArr, selectTileClicked } from './slice/selectors';
 import _ from 'lodash';
-import {MainBtn} from "../../components/Button";
+import { MainBtn } from '../../components/Button';
 
 const useStyles = makeStyles(() => ({
   root: {
     display: 'flex',
     flexWrap: 'wrap',
     margin: '20px auto',
+  },
+  btn: {
+    display: 'block',
+    margin: '250px auto',
+  },
+  result: {
+    fontSize: 33,
+    textAlign: 'center',
+    marginBottom: 20,
   },
 }));
 
@@ -23,46 +32,23 @@ interface IArrayWithColor {
 }
 
 const createTilesArr = () => {
-  let numbers = new Set;
+  let numbers = new Set();
   let newTilesArr: IArrayWithColor[] = [];
-  while (numbers.size < 12) numbers.add(Math.floor(Math.random() * (13 - 1) + 1));
+  while (numbers.size < 12)
+    numbers.add(Math.floor(Math.random() * (13 - 1) + 1));
   [...numbers].forEach((num: any) => {
-    if(num <= 4) {
+    if (num <= 4) {
       newTilesArr.push({ id: num, color: '#F50717' });
     }
-    if(num > 4 && num <= 8) {
+    if (num > 4 && num <= 8) {
       newTilesArr.push({ id: num, color: '#2328EB' });
     }
-    if(num > 8 && num <= 12) {
+    if (num > 8 && num <= 12) {
       newTilesArr.push({ id: num, color: '#15F057' });
     }
-  })
+  });
   return newTilesArr;
-}
-
-/*function getColor() {
-  switch (Math.floor(Math.random() * 4)) {
-    case 0: {
-      return '#F50717';
-    }
-    case 1: {
-      return '#2328EB';
-    }
-    case 2: {
-      return '#15F057';
-    }
-    case 3: {
-      return '#F0E824';
-    }
-  }
-}
-function createTiles(tilesQuantity: number) {
-  let newTilesArr: IArrayWithColor[] = [];
-  for (let i = 1; i <= tilesQuantity; i++) {
-    newTilesArr.push({ id: i, color: getColor() as string });
-  }
-  return newTilesArr;
-}*/
+};
 
 function compareColors(arr): any {
   let m: number[] = [];
@@ -96,6 +82,9 @@ export const HomePage = () => {
   const [arrayWithColor, setArrayWithColor] = useState<IArrayWithColor[]>([]);
   const [tileToClose, setTileToClose] = useState<number[]>([]);
   const [isTimeout, setIsTimeout] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+
+  console.log('clickCount', clickCount);
 
   useEffect(() => {
     setArrayWithColor(createTilesArr());
@@ -122,29 +111,40 @@ export const HomePage = () => {
     }
   }, [comparedArr]);
 
+  const handleTileClick = () => {
+    setClickCount(prev => prev + 1);
+  };
+
   const classes = useStyles();
 
   return (
     <Container maxWidth="sm">
-      <div className={classes.root}>
-        <>
-          {comparedArr?.length !== 12 ? arrayWithColor.map(item => {
-            return (
-              <Tile
-                key={item.id}
-                id={item.id}
-                color={item.color}
-                tileToClose={tileToClose}
-                setIsTimeout={setIsTimeout}
-                isTimeout={isTimeout}
-              />
-            );
-          }) :
-            <MainBtn/>
-          }
-          {/*<MainBtn/>*/}
-        </>
-      </div>
+      <>
+        {comparedArr?.length !== 12 ? (
+          <div className={classes.root}>
+            {arrayWithColor.map(item => {
+              return (
+                <Tile
+                  key={item.id}
+                  id={item.id}
+                  color={item.color}
+                  tileToClose={tileToClose}
+                  setIsTimeout={setIsTimeout}
+                  isTimeout={isTimeout}
+                  clickCount={handleTileClick}
+                />
+              );
+            })}
+          </div>
+        ) : (
+          <div className={classes.btn}>
+            <div className={classes.result}>
+              {`Ваш результат: ${clickCount} клика(ов)`}
+            </div>
+            <MainBtn />
+          </div>
+        )}
+      </>
     </Container>
   );
 };
