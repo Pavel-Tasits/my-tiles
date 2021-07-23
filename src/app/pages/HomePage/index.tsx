@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useHomepageSlice } from './slice';
 import { selectComparedIdArr, selectTileClicked } from './slice/selectors';
 import _ from 'lodash';
+import {MainBtn} from "../../components/Button";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -21,7 +22,25 @@ interface IArrayWithColor {
   color: string;
 }
 
-function getColor() {
+const createTilesArr = () => {
+  let numbers = new Set;
+  let newTilesArr: IArrayWithColor[] = [];
+  while (numbers.size < 12) numbers.add(Math.floor(Math.random() * (13 - 1) + 1));
+  [...numbers].forEach((num: any) => {
+    if(num <= 4) {
+      newTilesArr.push({ id: num, color: '#F50717' });
+    }
+    if(num > 4 && num <= 8) {
+      newTilesArr.push({ id: num, color: '#2328EB' });
+    }
+    if(num > 8 && num <= 12) {
+      newTilesArr.push({ id: num, color: '#15F057' });
+    }
+  })
+  return newTilesArr;
+}
+
+/*function getColor() {
   switch (Math.floor(Math.random() * 4)) {
     case 0: {
       return '#F50717';
@@ -37,14 +56,13 @@ function getColor() {
     }
   }
 }
-
 function createTiles(tilesQuantity: number) {
   let newTilesArr: IArrayWithColor[] = [];
   for (let i = 1; i <= tilesQuantity; i++) {
     newTilesArr.push({ id: i, color: getColor() as string });
   }
   return newTilesArr;
-}
+}*/
 
 function compareColors(arr): any {
   let m: number[] = [];
@@ -80,7 +98,7 @@ export const HomePage = () => {
   const [isTimeout, setIsTimeout] = useState(false);
 
   useEffect(() => {
-    setArrayWithColor(createTiles(12));
+    setArrayWithColor(createTilesArr());
   }, []);
 
   useEffect(() => {
@@ -109,18 +127,23 @@ export const HomePage = () => {
   return (
     <Container maxWidth="sm">
       <div className={classes.root}>
-        {arrayWithColor.map(item => {
-          return (
-            <Tile
-              key={item.id}
-              id={item.id}
-              color={item.color}
-              tileToClose={tileToClose}
-              setIsTimeout={setIsTimeout}
-              isTimeout={isTimeout}
-            />
-          );
-        })}
+        <>
+          {comparedArr?.length !== 12 ? arrayWithColor.map(item => {
+            return (
+              <Tile
+                key={item.id}
+                id={item.id}
+                color={item.color}
+                tileToClose={tileToClose}
+                setIsTimeout={setIsTimeout}
+                isTimeout={isTimeout}
+              />
+            );
+          }) :
+            <MainBtn/>
+          }
+          {/*<MainBtn/>*/}
+        </>
       </div>
     </Container>
   );
