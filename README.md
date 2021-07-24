@@ -14,6 +14,5 @@ The game is considered to be over when all of the tiles are opened.
 </dl>
 
 Used tools:
-```shell
+
 React, Typescript, Redux Toolkit, Material UI, Lodash
-```
