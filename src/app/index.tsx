@@ -4,8 +4,8 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
 import { GlobalStyle } from '../styles/global-styles';
 
-//import { HomePage } from './pages/HomePage/Loadable';
-import { HomePage } from './pages/HomePage';
+import { HomePage } from './pages/HomePage/Loadable';
+//import { HomePage } from './pages/HomePage';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 
